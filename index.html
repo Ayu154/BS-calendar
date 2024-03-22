@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bikram Sambat Calendar by Lohani</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn-container {
+            margin-bottom: 20px;
+        }
+        .btn-container button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .saturday {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1 style="color: rgb(153, 49, 130);"><center>Designed and coded by: Lohani Ayush</center></h1>
+<h2 id="month-name">Baisakh 2081 Bikram Sambat</h2> <!-- Updated line -->
+
+<div class="btn-container">
+    <button onclick="previousMonth()">Previous Month</button>
+    <button onclick="nextMonth()">Next Month</button>
+</div>
+
+<div id="calendar"></div>
+
+<script>
+    let currentMonth = 1; // Current month (1-12)
+    const currentYear = 2081; // Current Bikram Sambat year
+
+    // Function to generate calendar for a specific month and year
+    function generateCalendar(month, year) {
+        const calendarDiv = document.getElementById('calendar');
+        const monthName = getMonthName(month);
+        document.getElementById('month-name').textContent = monthName + ' ' + year + ' Bikram Sambat';
+
+        const date = new Date(year, month - 1, 1);
+        const daysInMonth = new Date(year, month, 0).getDate();
+        const firstDayIndex = date.getDay();
+        const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        
+        let table = '<table><tr>';
+        
+        // Adding weekday headers
+        for(let i = 0; i < 7; i++) {
+            table += '<th>' + weekdays[i] + '</th>';
+        }
+        table += '</tr><tr>';
+
+        // Adding blank cells for the days before the 1st of the month
+        for(let i = 0; i < firstDayIndex; i++) {
+            table += '<td></td>';
+        }
+
+        // Adding the days of the month
+        for(let i = 1; i <= daysInMonth; i++) {
+            if(date.getDay() === 0) {
+                table += '</tr><tr>';
+            }
+            if(date.getDay() === 6) {
+                table += '<td class="saturday">' + i + '</td>';
+            } else {
+                table += '<td>' + i + '</td>';
+            }
+            date.setDate(date.getDate() + 1);
+        }
+
+        // Completing the last row with blank cells if needed
+        if(date.getDay() !== 0) {
+            for(let i = date.getDay(); i < 7; i++) {
+                table += '<td></td>';
+            }
+        }
+
+        table += '</tr></table>';
+
+        calendarDiv.innerHTML = table;
+    }
+
+    // Function to display previous month
+    function previousMonth() {
+        currentMonth--;
+        if(currentMonth === 0) {
+            currentMonth = 12;
+        }
+        generateCalendar(currentMonth, currentYear);
+    }
+
+    // Function to display next month
+    function nextMonth() {
+        currentMonth++;
+        if(currentMonth === 13) {
+            currentMonth = 1;
+        }
+        generateCalendar(currentMonth, currentYear);
+    }
+
+    // Function to get month name
+    function getMonthName(month) {
+        const monthNames = ['Baisakh', 'Jestha', 'Ashad', 'Shrawan', 'Bhadra', 'Ashwin', 'Kartik', 'Mangsir', 'Poush', 'Magh', 'Falgun', 'Chaitra'];
+        return monthNames[month - 1];
+    }
+
+    // Initial generation of calendar for Bikram Sambat year 2081
+    generateCalendar(currentMonth, currentYear);
+</script>
+
+</body>
+</html>
